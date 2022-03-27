@@ -1,0 +1,116 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff
+/backend/.idea
+
+# IntelliJ
+/backend/out/
+
+# mpeltonen/sbt-idea plugin
+/backend/.idea_modules/
+
+### Java ###
+# Compiled class file
+/backend/*.class
+
+# Log file
+/backend/*.log
+
+# Package Files #
+/backend/*.jar
+/backend/*.war
+/backend/*.nar
+/backend/*.ear
+/backend/*.zip
+/backend/*.tar.gz
+/backend/*.rar
+
+#springboot
+/backend/HELP.md
+/backend/target/
+/backend/!.mvn/wrapper/maven-wrapper.jar
+/backend/!**/src/main/**/target/
+/backend/!**/src/test/**/target/
+/backend/*.iws
+/backend/*.iml
+/backend/*.ipr
+/backend/src/main/resources/
+
+### STS ###
+/backend/.apt_generated
+/backend/.classpath
+/backend/.factorypath
+/backend/.project
+/backend/.settings
+/backend/.springBeans
+/backend/.sts4-cache
+
+
+### NetBeans ###
+/backend//nbproject/private/
+/backend//nbbuild/
+/backend//dist/
+/backend//nbdist/
+/backend//.nb-gradle/
+/backend/build/
+/backend/!**/src/main/**/build/
+/backend/!**/src/test/**/build/
+
+
+
+### macOS ###
+# General
+.DS_Store
+/backend/.DS_Store
+.AppleDouble
+.LSOverride
+
+
+### VisualStudioCode ###
+/frontend/.vscode/*
+/frontend/!.vscode/settings.json
+/frontend/!.vscode/tasks.json
+/frontend/!.vscode/launch.json
+/frontend/!.vscode/extensions.json
+/frontend/!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+/frontend/.history/
+
+# Built Visual Studio Code Extensions
+/frontend/*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+/frontend/.history
+/frontend/.ionide
+
+# dependencies
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.js
+
+# testing
+/frontend/coverage
+
+# production
+/frontend/build
+
+# misc
+/frontend/.DS_Store
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+
+/tmp

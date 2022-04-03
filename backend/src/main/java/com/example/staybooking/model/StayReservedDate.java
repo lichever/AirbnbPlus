@@ -1,2 +1,23 @@
-package com.example.staybooking.model;public class StayReservedDate {
+package com.example.staybooking.model;
+
+import java.io.Serializable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "stay_reserved_date")
+public class StayReservedDate implements Serializable {
+  private static final long serialVersionUID = 1L;
+
+  @EmbeddedId
+  private StayReservedDateKey id;
+
+  // column stay_id  is a forenign key created in this table referencing the table stay
+  @MapsId("stay_id")
+  @ManyToOne
+  private Stay stay;
+
 }

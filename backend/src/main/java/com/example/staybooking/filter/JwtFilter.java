@@ -1,13 +1,21 @@
 package com.example.staybooking.filter;
 
+import com.example.staybooking.model.Authority;
 import com.example.staybooking.repository.AuthorityRepository;
 import com.example.staybooking.util.JwtUtil;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtFilter extends OncePerRequestFilter {
@@ -27,8 +35,43 @@ public class JwtFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     // filter by token, for invalid token return error, otherwise next filter
+    String authorizationHeader = request.getHeader(HEADER);
 
+    String jwt = null;
+    if (authorizationHeader != null && authorizationHeader.startsWith(PREFIX)) {
+      jwt = authorizationHeader.substring(7);
+    }
 
-     filterChain.doFilter(request, response);
+    if (jwt != null && jwtUtil.validateToken(jwt)) {
+      String username = jwtUtil.extractUsername(
+          jwt);//no need to log in and we can know username and authority
+//      Authority authority = authorityRepository.findAuthorityByUsername(username);
+      Authority authority = authorityRepository.findById(username).orElse(null);
+    }
+
+    //SecurityContextHolder可以让我们在任何一个controller
+    // We can define the principal directly as a method argument, and it will be correctly resolved by the framework:
+    // public String currentUserName(Principal principal){return principal.getName();} 直接通过Principal变量拿到username
+    if (jwt != null && jwtUtil.validateToken(jwt)
+        && SecurityContextHolder.getContext().getAuthentication() == null) {
+      String username = jwtUtil.extractUsername(jwt);
+      Authority authority = authorityRepository.findById(username).orElse(null);
+      if (authority != null) {
+        List<GrantedAuthority> grantedAuthorities = Arrays.asList(
+            new GrantedAuthority[]{new SimpleGrantedAuthority(authority.getAuthority())});
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            username, null, grantedAuthorities);
+
+        usernamePasswordAuthenticationToken.setDetails(
+            new WebAuthenticationDetailsSource().buildDetails(request));
+
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+      }
+    }
+
+    filterChain.doFilter(request, response);
   }
+
 }
+

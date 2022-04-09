@@ -19,7 +19,6 @@ public class StayImage implements Serializable {
 
   @ManyToOne
   @JoinColumn(name = "stay_id")
-
   //must add JsonIgnore, otherwise recurse forever
   @JsonIgnore
   private Stay stay;

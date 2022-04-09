@@ -57,7 +57,7 @@
             <version>1.115.0</version>
         </dependency>
         <dependency>
-            <groupId>com.google.maps</groupId>
+            <groupId>com.google.maps</groupId>starter-data
             <artifactId>google-maps-services</artifactId>
             <version>0.18.1</version>
         </dependency>

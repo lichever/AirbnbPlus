@@ -70,7 +70,7 @@ public class StayController {
       @RequestParam("address") String address,
       @RequestParam("description") String description,
       @RequestParam("guest_number") int guestNumber,
-      @RequestParam("images") MultipartFile[] images,
+      @RequestParam(value = "images", required = false) MultipartFile[] images,
       Principal principal) {
 
     Stay stay = new Stay.Builder()

@@ -3,6 +3,7 @@ package com.example.staybooking.controller;
 
 import com.example.staybooking.exception.GCSUploadException;
 import com.example.staybooking.exception.GeoCodingException;
+import com.example.staybooking.exception.InvalidSearchDateException;
 import com.example.staybooking.exception.InvalidStayAddressException;
 import com.example.staybooking.exception.StayNotExistException;
 import com.example.staybooking.exception.UserAlreadyExistException;
@@ -48,11 +49,16 @@ public class CustomExceptionHandler {
   }
 
   @ExceptionHandler(InvalidStayAddressException.class)
-  public final ResponseEntity<String> handleInvalidStayAddressExceptions(Exception ex, WebRequest request) {
+  public final ResponseEntity<String> handleInvalidStayAddressExceptions(Exception ex,
+      WebRequest request) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
-
+  @ExceptionHandler(InvalidSearchDateException.class)
+  public final ResponseEntity<String> handleInvalidSearchDateExceptions(Exception ex,
+      WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
 
 
 }

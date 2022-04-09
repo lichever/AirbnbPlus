@@ -16,6 +16,7 @@ public class StayReservedDate implements Serializable {
   private StayReservedDateKey id;
 
   // column stay_id  is a forenign key created in this table referencing the table stay
+  //here MapsId maps stay_id in the StayReservedDateKey, no need to create a new one, like JoinColumn
   @MapsId("stay_id")
   @ManyToOne
   private Stay stay;

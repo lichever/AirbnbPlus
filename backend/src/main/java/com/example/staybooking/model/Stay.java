@@ -36,7 +36,8 @@ public class Stay {
   private User host;
 
   @JsonIgnore
-  //mapperBy = "stay" because in StayReservedDate the field variable named stay
+  //mapperBy = "stay" because in StayReservedDate the field variable named stay, similar to StayImage
+  //add or delete stay will populate to StayReservedDate, StayImage
   @OneToMany(mappedBy = "stay", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<StayReservedDate> reservedDates;
 

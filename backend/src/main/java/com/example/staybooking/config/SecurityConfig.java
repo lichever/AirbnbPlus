@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   //authorize put more strict url first
+  //all endpoint必须写在antMatchers里， 不然默认是internal function
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests()
@@ -38,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/stays").hasAuthority("ROLE_HOST")
         .antMatchers("/stays/*").hasAuthority("ROLE_HOST")
         .antMatchers("/search").hasAuthority("ROLE_GUEST")
+        .antMatchers("/reservations").hasAuthority("ROLE_GUEST")
+        .antMatchers("/reservations/*").hasAuthority("ROLE_GUEST")
         .anyRequest()
         .authenticated().and().csrf().disable();
 
@@ -45,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);//jwtFilter 不一定排第二，但一定排UsernamePasswordAuthenticationFilter之前
 
   }
 

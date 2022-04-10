@@ -1,12 +1,16 @@
 package com.example.staybooking.service;
 
+import com.example.staybooking.exception.StayDeleteException;
 import com.example.staybooking.exception.StayNotExistException;
 import com.example.staybooking.model.Location;
+import com.example.staybooking.model.Reservation;
 import com.example.staybooking.model.Stay;
 import com.example.staybooking.model.StayImage;
 import com.example.staybooking.model.User;
 import com.example.staybooking.repository.LocationRepository;
+import com.example.staybooking.repository.ReservationRepository;
 import com.example.staybooking.repository.StayRepository;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,14 +28,17 @@ public class StayService {
   private LocationRepository locationRepository;
   private ImageStorageService imageStorageService;
   private GeoCodingService geoCodingService;
+  private ReservationRepository reservationRepository;
 
   @Autowired
   public StayService(StayRepository stayRepository, LocationRepository locationRepository,
-      ImageStorageService imageStorageService, GeoCodingService geoCodingService) {
+      ImageStorageService imageStorageService, GeoCodingService geoCodingService, ReservationRepository reservationRepository) {
     this.stayRepository = stayRepository;
     this.locationRepository = locationRepository;
     this.imageStorageService = imageStorageService;
     this.geoCodingService = geoCodingService;
+    this.reservationRepository = reservationRepository;
+
   }
 
   public List<Stay> listByUser(String username) {
@@ -40,7 +47,7 @@ public class StayService {
 
   public Stay findByIdAndHost(Long stayId, String username) throws StayNotExistException {
     Stay stay = stayRepository.findByIdAndHost(stayId,
-                                               new User.Builder().setUsername(username).build());
+        new User.Builder().setUsername(username).build());
     if (stay == null) {
       throw new StayNotExistException("Stay doesn't exist");
     }
@@ -51,7 +58,7 @@ public class StayService {
     //foreach images: imageStorageService.save(image)
     //collect url
     //set url to stay object
-
+    //TODO: append function for editing stay
     List<String> mediaLinks = Arrays.stream(images).parallel()
                                     .map(image -> imageStorageService.save(image)).collect(
             Collectors.toList());
@@ -62,7 +69,6 @@ public class StayService {
     stay.setImages(stayImages);
     stayRepository.save(stay);// stay images cascading
 
-
     Location location = geoCodingService.getLatLng(stay.getId(), stay.getAddress());
     locationRepository.save(location);
   }
@@ -71,10 +77,19 @@ public class StayService {
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public void delete(Long stayId, String username) throws StayNotExistException {
     Stay stay = stayRepository.findByIdAndHost(stayId,
-                                               new User.Builder().setUsername(username).build());
+        new User.Builder().setUsername(username).build());
     if (stay == null) {
       throw new StayNotExistException("Stay doesn't exist");
     }
+
+    //没有预定的stay才能删除
+    List<Reservation> reservations = reservationRepository.findByStayAndCheckoutDateAfter(stay,
+        LocalDate.now());
+
+    if (reservations != null && reservations.size() > 0) {
+      throw new StayDeleteException("Cannot delete stay with active reservation");
+    }
+
     stayRepository.deleteById(stayId);
   }
 }

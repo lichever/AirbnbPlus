@@ -3,8 +3,12 @@ package com.example.staybooking.controller;
 
 import com.example.staybooking.exception.GCSUploadException;
 import com.example.staybooking.exception.GeoCodingException;
+import com.example.staybooking.exception.InvalidReservationDateException;
 import com.example.staybooking.exception.InvalidSearchDateException;
 import com.example.staybooking.exception.InvalidStayAddressException;
+import com.example.staybooking.exception.ReservationCollisionException;
+import com.example.staybooking.exception.ReservationNotFoundException;
+import com.example.staybooking.exception.StayDeleteException;
 import com.example.staybooking.exception.StayNotExistException;
 import com.example.staybooking.exception.UserAlreadyExistException;
 import com.example.staybooking.exception.UserNotExistException;
@@ -60,5 +64,27 @@ public class CustomExceptionHandler {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(ReservationCollisionException.class)
+  public final ResponseEntity<String> handleReservationCollisionExceptions(Exception ex,
+      WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler(InvalidReservationDateException.class)
+  public final ResponseEntity<String> handleInvalidReservationDateExceptions(Exception ex,
+      WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(ReservationNotFoundException.class)
+  public final ResponseEntity<String> handleReservationNotFoundExceptions(Exception ex,
+      WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(StayDeleteException.class)
+  public final ResponseEntity<String> handleStayDeleteExceptions(Exception ex, WebRequest request) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+  }
 
 }

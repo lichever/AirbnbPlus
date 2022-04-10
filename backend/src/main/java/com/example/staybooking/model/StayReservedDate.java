@@ -21,4 +21,20 @@ public class StayReservedDate implements Serializable {
   @ManyToOne
   private Stay stay;
 
+
+  public StayReservedDate() {}
+
+  public StayReservedDate(StayReservedDateKey id, Stay stay) {
+    this.id = id;
+    this.stay = stay;
+  }
+
+  public StayReservedDateKey getId() {
+    return id;
+  }
+
+  public Stay getStay() {
+    return stay;
+  }
+
 }

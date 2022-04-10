@@ -64,7 +64,7 @@ public class ReservationService {
 
   }
 
-  //这里可以只用reservationId  and  findById， 前端可以少传一个username
+  //TODO 这里可以只用reservationId  and  findById， 前端可以少传一个username
   @Transactional(isolation = Isolation.SERIALIZABLE)
   public void delete(Long reservationId, String username) {
     Reservation reservation = reservationRepository.findByIdAndGuest(reservationId,
@@ -75,6 +75,7 @@ public class ReservationService {
     }
     for (LocalDate date = reservation.getCheckinDate();
          date.isBefore(reservation.getCheckoutDate()); date = date.plusDays(1)) {
+
       stayReservationDateRepository.deleteById(
           new StayReservedDateKey(reservation.getStay().getId(), date));
     }

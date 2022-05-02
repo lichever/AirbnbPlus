@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service  //this layer defines custom crud operations for the stay collection in a higher abstraction level of db
 public class StayService {
 
   private StayRepository stayRepository;
@@ -63,6 +63,7 @@ public class StayService {
                                     .map(image -> imageStorageService.save(image)).collect(
             Collectors.toList());
     List<StayImage> stayImages = new ArrayList<>();
+    
     for (String mediaLink : mediaLinks) {
       stayImages.add(new StayImage(mediaLink, stay));
     }
@@ -74,7 +75,7 @@ public class StayService {
   }
 
 
-  @Transactional(isolation = Isolation.SERIALIZABLE)
+  @Transactional(isolation = Isolation.SERIALIZABLE) //delete stay has cascading operation so need Transactional
   public void delete(Long stayId, String username) throws StayNotExistException {
     Stay stay = stayRepository.findByIdAndHost(stayId,
         new User.Builder().setUsername(username).build());

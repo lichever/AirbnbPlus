@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+//this layer defines routes for the stay collection in the highest abstraction level, Controler
+// Responsible for request forwarding , Accept the parameters from the page , Pass to Service Handle
+// , Received return value , Then send it to the page .
 public class StayController {
 
   private StayService stayService;
@@ -50,7 +53,6 @@ public class StayController {
   public Stay getStay(@PathVariable Long stayId, Principal principal) {
     return stayService.findByIdAndHost(stayId, principal.getName());
   }
-
 
 //  @PostMapping("/stays")
 //  public void addStay(
@@ -88,7 +90,6 @@ public class StayController {
     stayService.add(stay, images);
   }
 
-
 //  @DeleteMapping("/stays")
 //  public void deleteStay(
 //      @RequestParam(name = "stay_id") Long stayId,
@@ -105,7 +106,6 @@ public class StayController {
   public List<Reservation> listReservations(@PathVariable Long stayId) {
     return reservationService.listByStay(stayId);
   }
-
 
 
 }
